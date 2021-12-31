@@ -6,10 +6,10 @@ export default function Spirograph() {
   const [initialPoints,initialSkips] = typeof window !== 'undefined' && window?.location.search?.slice(1).split(',').map(Number) || [7, 3];
   const [showStar, setShowStar] = useState(true);
   const [showDots, setShowDots] = useState(true);
-  const [showBoundary, setShowBooundary] = useState(true);
-  const [showCircles, setShowCircles] = useState(true);
+  const [showBoundary, setShowBooundary] = useState(false);
+  const [showCircles, setShowCircles] = useState(false);
   const [showPrimary, setShowPrimary] = useState(true);
-  const [showSecondary, setShowSecondary] = useState(true);
+  const [showSecondary, setShowSecondary] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [points, setPoints] = useState(initialPoints || 7);
   const maxSkips = Math.floor((points-1)/2);
