@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import RollingSpirograph from '~/rollingSpirograph';
 
 export default function Spirograph() {
+  const [isLive,setLive] = useState(false);
   const [initialPoints,initialSkips] = typeof window !== 'undefined' && window?.location.search?.slice(1).split(',').map(Number) || [7, 3];
   const [showStar, setShowStar] = useState(true);
   const [showDots, setShowDots] = useState(true);
@@ -9,9 +10,19 @@ export default function Spirograph() {
   const [showCircles, setShowCircles] = useState(true);
   const [showPrimary, setShowPrimary] = useState(true);
   const [showSecondary, setShowSecondary] = useState(true);
-  const [speed, setSpeed] = useState(2);
+  const [speed, setSpeed] = useState(1);
   const [points, setPoints] = useState(initialPoints || 7);
-  const [skips, setSkips] = useState(initialSkips || 3);
+  const maxSkips = Math.floor((points-1)/2);
+  const [skips, setSkips] = useState(Math.min(initialSkips || 3, maxSkips));
+  useEffect(() => {
+    if (skips > maxSkips) {
+      setSkips(maxSkips);
+    }
+  }, [skips, maxSkips]);
+  useEffect(() => setLive(true), []);
+  if (!isLive) {
+    return null;
+  }
   const bools = [
     {label: 'Show star', value: showStar, setter: setShowStar},
     {label: 'Show dots', value: showDots, setter: setShowDots},
@@ -21,8 +32,8 @@ export default function Spirograph() {
     {label: 'Show secondary polygons', value: showSecondary, setter: setShowSecondary},
   ];
   const ranges = [
-    {label: 'Points', value: points, setter: setPoints, min: 3, max: 29, step: 2},
-    {label: 'Skips', value: skips, setter: setSkips, min: 2, max: 11},
+    {label: 'Points', value: points, setter: setPoints, min: 5, max: 29, step: 2},
+    {label: 'Skips', value: skips, setter: setSkips, min: 2, max: maxSkips},
     {label: 'Speed', value: speed, setter: setSpeed, min: 0, max: 10},
   ];
   const props = {
